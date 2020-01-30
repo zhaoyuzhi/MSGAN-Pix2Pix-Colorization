@@ -9,9 +9,9 @@ python train.py \
 --gpu_ids '0, 1, 2, 3' \
 --cudnn_benchmark True \
 --epochs 30 \
---batch_size 1 \
---lr_g 0.0002 \
---lr_d 0.0002 \
+--batch_size 32 \
+--lr_g 0.0001 \
+--lr_d 0.0001 \
 --b1 0.5 \
 --b2 0.999 \
 --weight_decay 0 \
@@ -23,7 +23,8 @@ python train.py \
 --random_type 'gaussian' \
 --random_var 1.0 \
 --num_workers 8 \
---lambda_gan 0.01 \
+--lambda_l1 10 \
+--lambda_gan 1 \
 --lambda_ms 1 \
 --pad 'reflect' \
 --norm 'bn' \

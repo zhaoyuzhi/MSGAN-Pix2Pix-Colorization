@@ -35,7 +35,8 @@ if __name__ == "__main__":
     parser.add_argument('--random_type', type = str, default = 'gaussian', help = 'the type of adding noise')
     parser.add_argument('--random_var', type = float, default = 1.0, help = 'the var of adding noise')
     parser.add_argument('--num_workers', type = int, default = 8, help = 'number of cpu threads to use during batch generation')
-    parser.add_argument('--lambda_gan', type = float, default = 0.01, help = 'coefficient for GAN Loss')
+    parser.add_argument('--lambda_l1', type = float, default = 10, help = 'coefficient for GAN Loss')
+    parser.add_argument('--lambda_gan', type = float, default = 1, help = 'coefficient for GAN Loss')
     parser.add_argument('--lambda_ms', type = float, default = 1, help = 'coefficient for mode seeking Loss')
     # Initialization parameters
     parser.add_argument('--pad', type = str, default = 'reflect', help = 'pad type of networks')
@@ -73,8 +74,8 @@ if __name__ == "__main__":
     else:
         print('Continue-training settings: [Epochs: %d] [Batch size: %d] [Learning rate: %.4f] [Saving mode: %s]'
             % (opt.epochs, opt.batch_size, opt.lr_g, opt.save_mode))
-        print('[lambda_attn: %.2f] [lambda_percp: %.2f] [lambda_gan: %.2f] [GAN_mode: %s]'
-            % (opt.lambda_attn, opt.lambda_percp, opt.lambda_gan, opt.gan_mode))
+        print('[random_type: %s] [random_var: %.2f] [lambda_ms: %.2f] [lambda_gan: %.2f] [GAN_mode: %s]'
+            % (opt.random_type, opt.random_var, opt.lambda_ms, opt.lambda_gan, opt.gan_mode))
         if opt.gan_mode == 'LSGAN':
             trainer.Continue_train_LSGAN(opt)
         if opt.gan_mode == 'WGAN':

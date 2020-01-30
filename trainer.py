@@ -272,7 +272,7 @@ def Continue_train_LSGAN(opt):
             GAN_Loss = criterion_MSE(fake_scalar, valid)
 
             # Overall Loss and optimize
-            loss = Pixellevel_L1_Loss + opt.lambda_ms * ModeSeeking_Loss + opt.lambda_gan * GAN_Loss
+            loss = opt.lambda_l1 * Pixellevel_L1_Loss + opt.lambda_ms * ModeSeeking_Loss + opt.lambda_gan * GAN_Loss
             loss.backward()
             optimizer_G.step()
 

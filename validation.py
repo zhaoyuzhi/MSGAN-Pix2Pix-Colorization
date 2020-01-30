@@ -13,7 +13,7 @@ import utils
 #                 Testing
 # ----------------------------------------
 def test(opt, rgb, colornet):
-    noise = utils.get_noise(1, opt.z_dim, opt.random_type)
+    noise = utils.get_noise(1, opt.z_dim, opt.random_type).cuda()
     out_rgb = colornet(rgb, noise)
     out_rgb = out_rgb.cpu().detach().numpy().reshape([3, 256, 256])
     out_rgb = out_rgb.transpose(1, 2, 0)
@@ -24,14 +24,14 @@ def test(opt, rgb, colornet):
 def getImage(root):
     transform = transforms.Compose([
             transforms.ToTensor(),
-            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+            transforms.Normalize((0.5,), (0.5,))
         ])
 
-    img = Image.open(root).convert('RGB')
+    img = Image.open(root).convert('L')
     #img = img.crop((256, 0, 512, 256))
     rgb = img.resize((256, 256), Image.ANTIALIAS)
     rgb = transform(rgb)
-    rgb = rgb.reshape([1, 3, 256, 256]).cuda()
+    rgb = rgb.reshape([1, 1, 256, 256]).cuda()
     return rgb
 
 def comparison(opt, colornet):
@@ -65,8 +65,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     # Loading parameters
     parser.add_argument('--pre_train', type = bool, default = False, help = 'pre-train ot not')
-    parser.add_argument('--load_name', type = str, default = 'Pre_image_epoch4_bs16', help = 'load the pre-trained model with certain epoch')
-    parser.add_argument('--test_image_name', type = str, default = './ILSVRC2012_val_256/ILSVRC2012_val_00001196.JPEG', help = 'test image name')
+    parser.add_argument('--load_name', type = str, default = './models/Pre_only_colorization_epoch10_bs32.pth', help = 'load the pre-trained model with certain epoch')
+    parser.add_argument('--test_image_name', type = str, default = 'C:\\Users\\yzzha\\Desktop\\dataset\\ILSVRC2012_val_256\\ILSVRC2012_val_00008196.JPEG', help = 'test image name')
     # Initialization parameters
     parser.add_argument('--pad', type = str, default = 'reflect', help = 'pad type of networks')
     parser.add_argument('--norm', type = str, default = 'bn', help = 'normalization type of networks')
@@ -80,11 +80,11 @@ if __name__ == "__main__":
     parser.add_argument('--random_type', type = str, default = 'gaussian', help = 'the type of adding noise')
     parser.add_argument('--random_var', type = float, default = 1.0, help = 'the var of adding noise')
     parser.add_argument('--choice', type = str, default = 'colorization', help = 'choice of test operation')
-    parser.add_argument('--save_result', type = bool, default = False, help = 'whether the result image needs to be saved')
+    parser.add_argument('--save', type = bool, default = False, help = 'whether the result image needs to be saved')
     opt = parser.parse_args()
 
     # Define the basic variables
-    colornet = utils.create_generator(opt)
+    colornet = utils.create_generator(opt).cuda()
 
     # comparison: Compare the colorization output and ground truth
     # colorization: Show the colorization as original size
