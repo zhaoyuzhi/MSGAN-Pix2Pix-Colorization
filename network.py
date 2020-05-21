@@ -69,7 +69,7 @@ class Generator(nn.Module):
     def forward(self, x, noise):
         # pre-processing noise
         noise_expand = noise.view(noise.shape[0], noise.shape[1], 1, 1).expand(noise.shape[0], noise.shape[1], x.shape[2], x.shape[3])
-        x_with_noise = torch.cat((x, noise_expand), 1)      # out: batch * (1 + z_dim) * 256 * 256
+        x_with_noise = torch.cat((x, noise_expand), 1)          # out: batch * (1 + z_dim) * 256 * 256
         # U-Net generator with skip connections from encoder to decoder
         E1 = self.E1(x_with_noise)                              # out: batch * 32 * 256 * 256
         E2 = self.E2(E1)                                        # out: batch * 64 * 128 * 128
